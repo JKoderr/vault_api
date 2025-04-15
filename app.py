@@ -9,8 +9,10 @@ def home():
 @app.route('/generate-password', methods = ['POST'])
 def generate_password():
     data = request.get_json()
-    print(data)
-    return jsonify({"status": "received"})
+    length = data['length']
+    service = data['service']
+    print(length, service)
+    return jsonify({"length": length, "service": service})
 
 
 if __name__ == '__main__':
