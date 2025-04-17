@@ -58,5 +58,36 @@ def generate_password():
 
     return jsonify({"status": "success", "Time": current_time, "password": password, "service": service}), 201 #showing user pass
 
+
+AUTH_TOKEN = "supersecret1234"
+
+#authorization and pass dump
+@app.route('/get-passwords', methods = ['GET'])
+
+def get_passwords():
+    token = request.headers.get("Authorization")
+    
+    if token != f"Bearer {AUTH_TOKEN}":
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    key = load_create_key()#creating or using existing key
+    cipher = Fernet(key)
+    passwords = []
+
+    with open("my_passwords.txt", "r") as file:
+        for line in file:    
+            wordlist = line.strip().split(' | ')#splitting words into array
+            if len(wordlist) == 3:
+                timestamp, service, encrypted = wordlist
+                decrypted_password = cipher.decrypt(encrypted.encode()).decode()#decrypting password      
+                passwords.append({
+                    "timestamp": timestamp,
+                    "service": service,
+                    "password": decrypted_password
+                })
+    
+
+    return jsonify({"Your data": passwords}), 200 #showing user pass    
+
 if __name__ == '__main__':
     app.run(debug=True)
