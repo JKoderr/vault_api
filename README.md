@@ -78,3 +78,7 @@ http://127.0.0.1:5000
 - my_passwords.txt – log of encrypted passwords
 
 - requirements.txt – list of required packages
+
+##
+
+###  Educational project by Jakub JKoder — learning backend development with Python and Flask.
